@@ -41,7 +41,7 @@ pipenv install sqlalchemy alembic
 Initialize the Database: Initialize your SQLite database using Alembic.
 
 # alembic init migrations
-Run Migrations: After creating your models (which we will guide you through), apply migrations to create your database schema.
+Run Migrations: After creating your models, apply migrations to create your database schema.
 
 alembic revision --autogenerate -m "Create initial tables"
 alembic upgrade head
