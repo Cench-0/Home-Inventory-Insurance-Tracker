@@ -41,6 +41,43 @@ class Category(Base):
     def __repr__(self):
         return f"<Category(name = {self.name})>"
 
+# table 3: InsurancePolicy model(table)
+class InsurancePolicy(Base):
+    __tablename__ = "InsurancePolicies"
+
+    id = Column(Integer, primary_key = True)
+    policy_number = Column(String, nullable = False)
+    provider = Column (String, nullable = False)
+    start_date = Column(Date, nullable = False)
+    end_date = Column (Date, nullable = False)
+    premium_amount = Column(Float, nullable = False)
+
+
+    def __repr__(self):
+        return f" <InsurancePolicy(policy_number = {self.policy_number}, provider = {self.provider}, start_date = {self.start_date}, end_date = {self.end_date}, premium_amount = {self.premium_amount})>"
+    
+# table 4 - Claims table:
+class Claim(Base):
+    __tablename__ = "claims"
+
+    id = Column(Integer, primary_key = True)
+    claim_number = Column(String, nullable =  False)
+    status = Column (String, nullable = False)
+    payout_amount = Column(Float)
+    date_filed = Column(Date, nullable = False)
+
+    # table relationship (items table)
+
+    item = relationship("Item", back_populates = "claims")
+
+    def __repr__(self)
+        return f"<Claim(claim_number = {self.claim_number}, status = {self.status}, payout_amount = {self.payout_amount}, filed_date = {self.filed_date})>"
+
+
+
+
+
+
 
 
 
