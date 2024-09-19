@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
+#from sqlalchemy.orm import sessionmaker
 
 
 Base = declarative_base()
@@ -15,13 +16,14 @@ class Item (Base):
     value = Column (Float, nullable= False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable = False)
     purchase_date = Column(Date, nullable = False)
+    claims = relationship('Claim', primaryjoin="Item.id == Claim.item_id")
 
 
     # table relationships(items table and category table)
     category = relationship("Category", back_populates = "items")
 
     # relationship between Claims table and items table
-    claims = relationship("Claim", back_populates = "items")
+    claims = relationship("Claim", back_populates = "item")
 
     def __repr__(self):                  # repr method for defining an instance of the class Item (creating object)
         return f" <Item(name = {self.name}, value = {self.value}, category = {self.category.name}, purchase_date = {self.purchase_date})>"
@@ -66,12 +68,17 @@ class Claim(Base):
     payout_amount = Column(Float)
     date_filed = Column(Date, nullable = False)
 
+     #foreign key
+    item_id = Column(Integer, ForeignKey("items_id"), nullable = False)
+
     # table relationship (items table)
 
     item = relationship("Item", back_populates = "claims")
 
+   
+
     def __repr__(self):
-        return f"<Claim(claim_number = {self.claim_number}, status = {self.status}, payout_amount = {self.payout_amount}, filed_date = {self.filed_date})>"
+        return f"<Claim(claim_number = {self.claim_number}, status = {self.status}, payout_amount = {self.payout_amount})>"
 
 
 
