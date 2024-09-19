@@ -13,7 +13,7 @@ class Item (Base):
     id = Column(Integer, primary_key = True)
     name = Column (String, nullable = False)   #cannot have null values
     value = Column (Float, nullable= False)
-    category_id = Column(Integer, ForeignKey("category.id"), nullable = False)
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable = False)
     purchase_date = Column(Date, nullable = False)
 
 
@@ -27,7 +27,7 @@ class Item (Base):
         return f" <Item(name = {self.name}, value = {self.value}, category = {self.category.name}, purchase_date = {self.purchase_date})>"
 
 
-# table 2- categories table
+# Category Model (table 2- categories table)
 
 class Category(Base):
     __tablename__ = "categories"
@@ -70,18 +70,17 @@ class Claim(Base):
 
     item = relationship("Item", back_populates = "claims")
 
-    def __repr__(self)
+    def __repr__(self):
         return f"<Claim(claim_number = {self.claim_number}, status = {self.status}, payout_amount = {self.payout_amount}, filed_date = {self.filed_date})>"
-
-
-
-
-
-
 
 
 
 # the SQLite database
 def setup_database():
-    engine = create_engine('sqlite:///home_database.db')
-    Base.metadata.create_all(engine)
+        engine = create_engine('sqlite:///home_database.db')
+        Base.metadata.create_all(engine)
+if __name__ == '__main__':
+    setup_database()
+    print("Setup Complete")        
+
+
