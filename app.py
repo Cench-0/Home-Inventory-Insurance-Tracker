@@ -1,13 +1,14 @@
-from hashlib import new
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from models import Claim, Item, Category, InsurancePolicy, setup_database
+from models import Base, Claim, Item, Category, InsurancePolicy, setup_database
 from datetime import datetime
 
 
+
 #SQLite engine
-engine = create_engine("sqlite:///home_inventory.db")
+engine = create_engine("sqlite:///home_database.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
@@ -28,7 +29,11 @@ def add_item(name, value, category_name, purchase_date):
 
     if not category:
         print (f"Category '{category_name}' not found")
-        return
+        category = Category(name = category_name)
+        session.add(category)
+        session.commit()
+        print(f"Category '{category_name}' added")
+
     # create the item
     item = Item(name = name, value = value, category_id = category.id, purchase_date = purchase_date)
     session.add(item)
@@ -46,7 +51,8 @@ def view_items()    :
             print (f"Item ID: {item.id}, Name: {item.name}, Value: {item.value},Category: {item.category.name}, Purchase Date: {item.purchase_date}") 
 
 
-def update_item(item_id, new_name = None, new_category_name = None, new_purchase_date = None):
+def update_item(item_id, new_name=None, new_value=None, new_category_name=None, new_purchase_date=None):
+
     item = session.query(Item).filter_by(id = item_id).first()
     if not item:
         print(f"Item with ID {item_id} not found")
@@ -54,9 +60,9 @@ def update_item(item_id, new_name = None, new_category_name = None, new_purchase
 
 # when we have new values
     if new_name:
-        item.name = new.name
-    if new_name:
-        item.value = new_name
+        item.name = new_name
+    if new_value:
+        item.value = new_value
     if new_category_name:
         category = session.query(Category).filter_by(name = new_category_name).first()
         if category:
@@ -109,11 +115,12 @@ def file_claim(item_id, claim_number, status,payout_amount, filed_date):
         claim_number = claim_number,
         status = status,
         payout_amount = payout_amount,
-        filed_date = filed_date
+        date_filed = filed_date
     )
     session.add(claim)
     session.commit()
     print(f"Claim '{claim_number}' filed")
+
 def view_claims():
 
     claims = session.query(Claim).all()
@@ -121,7 +128,7 @@ def view_claims():
         print("No claims")
     else:
         for claim in claims:
-            print(f"Claim Number: {claim.claim_number}, Item: {claim.item.name}, Status: {claim.status}, Payout: {claim.payout_amount}, Filed Date: {claim.filed_date}")
+            print(f"Claim Number: {claim.claim_number}, Item: {claim.item.name}, Status: {claim.status}, Payout: {claim.payout_amount}, Filed Date: {claim.date_filed}")
 
 def main_menu():
     while True:
@@ -169,7 +176,7 @@ def main_menu():
         elif choice == "5":
             policy_number  = input("Policy number:")
             provider = input ("Enter provider:")
-            start_date = datetime.strptime(input("Enter start date (YYYY-MM-DD):"), '%Y-%m_%d')
+            start_date = datetime.strptime(input("Enter start date (YYYY-MM-DD):"), '%Y-%m-%d')
             end_date = datetime.strptime(input("Enter end date (YYYY-MM-DD):"), '%Y-%m-%d')
             premium_amount = float(input("Enter amount"))
             add_insurance_policy(policy_number, provider, start_date, end_date, premium_amount)
@@ -178,7 +185,7 @@ def main_menu():
             view_policies()
 
         elif choice == "7":
-            tem_id = int(input("Enter item ID for the claim: "))
+            item_id = int(input("Enter item ID for the claim: "))
             claim_number = input("Enter claim number: ")
             status = input("Enter claim status: ")
             payout_amount = float(input("Enter payout amount: "))
@@ -193,14 +200,22 @@ def main_menu():
             break
         else:
             print("Invalid choice")
-try:
+"""try:
     purchase_date = datetime.strptime(input("Enter date of purchase (YYYY-MM-DD): "), '%Y-%m-%d')
 except ValueError:
-    print("Invalid date format. Please enter the date in YYYY-MM-DD format.")            
+    print("Invalid date format. Please enter the date in YYYY-MM-DD format.")   """         
 
 
 if __name__ =="__main__":
+    setup_database()
+
+    #categoies examples
+    add_category("Electronics")
+
+
     main_menu()
+
+    
 
 
 

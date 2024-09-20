@@ -67,9 +67,10 @@ class Claim(Base):
     status = Column (String, nullable = False)
     payout_amount = Column(Float)
     date_filed = Column(Date, nullable = False)
+    item_id = Column(Integer, ForeignKey('items.id'), nullable = False)
 
      #foreign key
-    item_id = Column(Integer, ForeignKey("items_id"), nullable = False)
+    item_id = Column(Integer, ForeignKey("items.id"), nullable = False)
 
     # table relationship (items table)
 
