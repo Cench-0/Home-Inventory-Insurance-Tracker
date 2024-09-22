@@ -200,17 +200,13 @@ def main_menu():
             break
         else:
             print("Invalid choice")
-"""try:
-    purchase_date = datetime.strptime(input("Enter date of purchase (YYYY-MM-DD): "), '%Y-%m-%d')
-except ValueError:
-    print("Invalid date format. Please enter the date in YYYY-MM-DD format.")   """         
 
 
 if __name__ =="__main__":
     setup_database()
 
     #categoies examples
-    add_category("Electronics")
+    # add_category("Electronics")
 
 
     main_menu()
