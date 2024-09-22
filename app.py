@@ -88,7 +88,7 @@ def delete_item(item_id):
 
 def add_insurance_policy(policy_number, provider, start_date, end_date, premium_amount):
     policy = InsurancePolicy(
-        policy = policy_number,
+        policy_number = policy_number,
         provider = provider,
         start_date = start_date,
         end_date = end_date,

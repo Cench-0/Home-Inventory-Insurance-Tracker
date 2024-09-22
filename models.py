@@ -55,6 +55,7 @@ class InsurancePolicy(Base):
     premium_amount = Column(Float, nullable = False)
 
 
+
     def __repr__(self):
         return f" <InsurancePolicy(policy_number = {self.policy_number}, provider = {self.provider}, start_date = {self.start_date}, end_date = {self.end_date}, premium_amount = {self.premium_amount})>"
     
